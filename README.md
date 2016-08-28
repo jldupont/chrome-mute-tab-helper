@@ -1,0 +1,1 @@
+# chrome-mute-tab-helper
