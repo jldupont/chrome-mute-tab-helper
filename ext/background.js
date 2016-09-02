@@ -1,3 +1,8 @@
+/**
+  chrome tab mute state helper
+
+  @author: jldupont
+**/
 function chainCallbacks(params, callbacks) {
 
   var list = callbacks;
@@ -5,10 +10,10 @@ function chainCallbacks(params, callbacks) {
   if (typeof callbacks == "function")
     list = [callbacks];
 
-  for (var index=0; index<list.length; index++) {
-    var callback = list[index];
+  list.forEach(callback => {
     callback(params);
-  }
+  });
+
 };
 
 /*
@@ -46,7 +51,7 @@ function computeToggleState(muted) {
 /*
     Callback
 */
-function toggleStateChange(params) {
+function cbToggleStateChange(params) {
 
   var tabId = params.id;
   var key = params.key;
@@ -68,7 +73,7 @@ function toggleStateChange(params) {
 
 };
 
-function updateTabMutedState(params) {
+function cbUpdateTabMutedState(params) {
 
   var key = params.key;
   var state = params.state;
@@ -89,7 +94,7 @@ function _updateTabMuted(tabId, muted) {
 /*
     Callback
  */
-function setBrowserIconState(params) {
+function cbSetBrowserIconState(params) {
 
   var key = params.key;
   var state = params.state;
@@ -168,30 +173,30 @@ function _getAndActionWithKey(tabId, key, callbacks) {
 // ======================================================================== EVENTS
 
 /*
-    {status: "loading" }
-    {status: "complete"}
-    {mutedInfo: {muted: Boolean} }
-
-    - IF not "state" stored ==> by default, mute
+    Event : when a tab gets loaded with content
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
   if (changeInfo.status != 'complete')
     return;
 
-  getAndAction(tabId, [setBrowserIconState, updateTabMutedState]);
+  getAndAction(tabId, [cbSetBrowserIconState, cbUpdateTabMutedState]);
 });
 
 
-
+/*
+    Event: when the extension's browser action button gets pressed
+ */
 chrome.browserAction.onClicked.addListener(function(tab) {
-  getAndAction(tab.id, toggleStateChange);
+  getAndAction(tab.id, [cbToggleStateChange, cbUpdateTabMutedState]);
 });
 
+/*
+    Event: when a tab gets activated (in any window)
+ */
 chrome.tabs.onActivated.addListener(function(activeInfo) {
 
   var tabId = activeInfo.tabId;
-  //var winId = activeInfo.windowId;
 
-  getAndAction(tabId, [setBrowserIconState, updateTabMutedState]);
+  getAndAction(tabId, [cbSetBrowserIconState, cbUpdateTabMutedState]);
 });
