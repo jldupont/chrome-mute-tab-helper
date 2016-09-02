@@ -10,11 +10,6 @@ The user has now the following choices:
 
 When a browser tab is opened on a domain of state "perma-unmute", the user has the choice to revert to "perma-mute" through the page action button.
 
-Shortcut Keys
-=============
-
-By default, the key "alt-shift-m" can be used to mute/unmute the current tab. This action does not change the state associated with the domain (i.e. perma-mute, perma-unmute).
-
 History
 =======
 

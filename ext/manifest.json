@@ -26,15 +26,4 @@
     ,"tabs"
   ]
 
-
-  ,"commands": {
-
-    "CmdAlternateMuteUnmute": {
-      "suggested_key": {
-        "default": "Alt+Shift+M"
-        }
-        ,"description": "Alternate mute/unmute"
-      }
-
-  }
 }
